@@ -17,6 +17,9 @@ $(document).ready(function() {
   var source = $('#todos-template').html();
   var template = Handlebars.compile(source);
 
+  var searchSource = $('#search-template').html();
+  var searchtemplate = Handlebars.compile(searchSource);
+
   // helper function to render all todos to view
   // note: we empty and re-render the collection each time our todo data changes
   function render() {
@@ -28,7 +31,7 @@ $(document).ready(function() {
 
     // append html to the view
     $todosList.append(todosHtml);
-  };
+  }
 
   // GET all todos on page load
   $.ajax({
@@ -130,6 +133,21 @@ $(document).ready(function() {
           render();
         }
       });
+    });
+
+    //search request
+    $.ajax({
+      method: "GET",
+      url: baseUrl + '/search?q=',
+      success: function onSearchSuccess(json) {
+        console.log(json);
+
+        // set `allTodos` to todo data (json.data) from API
+        allTodos = json.todos;
+
+        // render all todos to view
+        render();
+      }
     });
 
 });
